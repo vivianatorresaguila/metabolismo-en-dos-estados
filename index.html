@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f4ef">
+  <meta name="description" content="Aplicación educativa para razonar cómo cambian el metabolismo de carbohidratos y grasas entre el estado alimentado y el ayuno nocturno.">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>Metabolismo en dos estados · Dra. Viviana Torres Águila</title>
+  <style>
+    :root {
+      --ink: #172a36;
+      --muted: #61717a;
+      --paper: #f5f4ef;
+      --panel: #ffffff;
+      --line: #dce2df;
+      --teal: #1d746e;
+      --teal-soft: #e8f2ef;
+      --amber: #b86d22;
+      --amber-soft: #fbf0df;
+      --blue: #486c8b;
+      --blue-soft: #eaf0f5;
+      --rose: #9c554d;
+      --rose-soft: #f8eeeb;
+      --shadow: 0 16px 44px rgba(24, 43, 51, .08);
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 9% 2%, rgba(29,116,110,.07), transparent 23rem),
+        radial-gradient(circle at 92% 15%, rgba(184,109,34,.06), transparent 21rem),
+        var(--paper);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+    button { font: inherit; }
+    button:focus-visible, a:focus-visible { outline: 3px solid #df9b48; outline-offset: 3px; }
+    .shell { width: min(1120px, calc(100% - 36px)); margin: 0 auto; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 0 16px; border-bottom: 1px solid rgba(23,42,54,.12);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 750; letter-spacing: -.02em; }
+    .brand-mark {
+      width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px;
+      color: white; background: var(--ink); font-size: 13px; letter-spacing: .04em;
+    }
+    .topnote { color: var(--muted); font-size: .82rem; }
+    .hero { padding: 54px 0 30px; max-width: 800px; }
+    .eyebrow {
+      display: inline-flex; gap: 8px; align-items: center; color: var(--teal);
+      font-size: .76rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 22px; height: 2px; background: currentColor; }
+    h1 { margin: 13px 0 13px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(2.3rem, 5vw, 4.2rem); line-height: 1.04; letter-spacing: -.045em; font-weight: 600; }
+    .lead { max-width: 690px; color: #465b66; font-size: clamp(1.03rem, 2vw, 1.2rem); }
+    .byline { margin-top: 16px; color: var(--muted); font-size: .88rem; }
+    .framework {
+      margin: 16px 0 0; padding: 13px 16px; border-left: 3px solid var(--teal);
+      background: rgba(255,255,255,.62); color: #435761; font-size: .9rem; border-radius: 0 10px 10px 0;
+    }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); }
+    .chooser { padding: 26px; margin: 12px 0 56px; }
+    .section-kicker { color: var(--muted); font-size: .78rem; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
+    h2 { margin: 6px 0 7px; font-size: clamp(1.3rem, 2.5vw, 1.75rem); letter-spacing: -.025em; line-height: 1.2; }
+    .section-copy { color: var(--muted); margin: 0 0 21px; }
+    .state-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .state-card {
+      border: 1px solid var(--line); background: white; text-align: left; padding: 21px;
+      border-radius: 16px; cursor: pointer; transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+    .state-card:hover { transform: translateY(-2px); border-color: #9bb8b2; box-shadow: 0 12px 24px rgba(24,43,51,.08); }
+    .state-card.fed:hover { border-color: #d9b07b; }
+    .state-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+    .state-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 13px; font-size: 1.25rem; }
+    .fed .state-icon { background: var(--amber-soft); }
+    .fast .state-icon { background: var(--blue-soft); }
+    .state-arrow { color: var(--muted); font-size: 1.4rem; line-height: 1; }
+    .state-card h3 { margin: 16px 0 5px; font-size: 1.12rem; }
+    .state-card p { margin: 0; color: var(--muted); font-size: .92rem; }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 15px; }
+    .pill { border-radius: 999px; padding: 4px 9px; font-size: .75rem; font-weight: 700; background: #f0f3f1; color: #465b66; }
+    .fed .pill:first-child { background: var(--amber-soft); color: #80501f; }
+    .fast .pill:first-child { background: var(--blue-soft); color: #3f607c; }
+    .scope-note { margin: 18px 1px 0; font-size: .82rem; color: var(--muted); }
+    .hidden { display: none !important; }
+    .workspace { padding: 25px; margin: 10px 0 56px; }
+    .work-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 20px; }
+    .back-button, .plain-button {
+      border: 0; background: transparent; color: var(--teal); font-weight: 750; cursor: pointer; padding: 8px 0;
+    }
+    .back-button:hover, .plain-button:hover { text-decoration: underline; }
+    .state-label { display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px; border-radius: 999px; font-size: .82rem; font-weight: 800; }
+    .state-label.fed-label { background: var(--amber-soft); color: #80501f; }
+    .state-label.fast-label { background: var(--blue-soft); color: #3f607c; }
+    .state-label .dot { width: 8px; height: 8px; background: currentColor; border-radius: 50%; }
+    .work-grid { display: grid; grid-template-columns: 225px minmax(0, 1fr); gap: 22px; align-items: start; }
+    .step-nav { border: 1px solid var(--line); border-radius: 15px; padding: 12px; background: #fbfcfa; }
+    .step-nav-title { margin: 3px 7px 9px; font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 800; }
+    .step-button {
+      display: flex; width: 100%; gap: 10px; align-items: center; padding: 9px 8px; text-align: left;
+      border: 0; background: transparent; border-radius: 9px; color: #64737a; cursor: default; font-size: .84rem;
+    }
+    .step-number { width: 23px; height: 23px; display: grid; place-items: center; border: 1px solid #cfd8d4; border-radius: 50%; font-size: .72rem; flex: 0 0 23px; }
+    .step-button.current { color: var(--ink); background: var(--teal-soft); font-weight: 800; }
+    .step-button.current .step-number { color: white; background: var(--teal); border-color: var(--teal); }
+    .step-button.done { color: var(--teal); }
+    .step-button.done .step-number { border-color: var(--teal); background: white; }
+    .question-area { min-height: 450px; }
+    .progress-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; color: var(--muted); font-size: .82rem; margin: 2px 0 11px; }
+    .progress-track { height: 6px; background: #e9eeeb; border-radius: 99px; overflow: hidden; margin-bottom: 21px; }
+    .progress-fill { height: 100%; background: var(--teal); border-radius: 99px; transition: width .25s ease; }
+    .question-number { color: var(--teal); font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; font-weight: 850; }
+    .question-title { margin: 8px 0 10px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.5rem, 3.2vw, 2.15rem); line-height: 1.16; letter-spacing: -.025em; }
+    .question-prompt { color: #53656e; margin: 0 0 19px; max-width: 690px; }
+    .choices { display: grid; gap: 10px; }
+    .choice {
+      display: flex; align-items: flex-start; gap: 11px; width: 100%; padding: 13px 14px; text-align: left;
+      border-radius: 12px; border: 1px solid var(--line); background: white; color: var(--ink); cursor: pointer; transition: border .15s, background .15s;
+    }
+    .choice:hover:not(:disabled) { border-color: #8eb1aa; background: #fbfdfc; }
+    .choice:disabled { cursor: default; opacity: 1; }
+    .choice-mark { width: 22px; height: 22px; flex: 0 0 22px; display: grid; place-items: center; border: 1px solid #cbd5d1; border-radius: 50%; color: transparent; font-size: .78rem; font-weight: 900; margin-top: 1px; }
+    .choice.correct { border-color: #7db4a8; background: #eef7f3; }
+    .choice.correct .choice-mark { color: white; border-color: var(--teal); background: var(--teal); }
+    .choice.incorrect { border-color: #deb0a8; background: #fff5f2; }
+    .choice.incorrect .choice-mark { color: white; border-color: var(--rose); background: var(--rose); }
+    .feedback { margin-top: 14px; padding: 14px 16px; border-radius: 12px; border: 1px solid #d3e6df; background: #f0f7f4; color: #2d514c; }
+    .feedback.wrong { border-color: #ecd3c8; background: #fbf3ed; color: #694a3c; }
+    .feedback strong { display: block; margin-bottom: 4px; }
+    .feedback p { margin: 0; font-size: .92rem; }
+    .action-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 18px; }
+    .text-small { color: var(--muted); font-size: .8rem; }
+    .primary-button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 16px;
+      border: 0; border-radius: 10px; background: var(--ink); color: white; font-weight: 800; cursor: pointer;
+      transition: transform .15s ease, background .15s ease;
+    }
+    .primary-button:hover { transform: translateY(-1px); background: #264251; }
+    .primary-button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+    .result-head { display: flex; gap: 15px; align-items: center; margin-bottom: 20px; }
+    .result-icon { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 15px; background: var(--teal-soft); color: var(--teal); font-size: 1.4rem; }
+    .result-head h2 { margin: 0 0 3px; }
+    .result-head p { margin: 0; color: var(--muted); }
+    .result-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
+    .result-tile { padding: 14px; border-radius: 13px; border: 1px solid var(--line); background: #fcfdfb; }
+    .result-tile span { display: block; color: var(--muted); font-size: .73rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; }
+    .result-tile strong { font-size: .91rem; line-height: 1.35; display: block; }
+    .result-explanation { margin: 16px 0 0; padding: 16px 18px; background: var(--teal-soft); border-radius: 14px; color: #30544e; }
+    .result-explanation h3 { margin: 0 0 6px; font-size: 1rem; }
+    .result-explanation p { margin: 0; font-size: .92rem; }
+    .carbon-card { margin-top: 16px; border: 1px solid #ead9be; background: #fffaf1; border-radius: 14px; padding: 16px 18px; }
+    .carbon-card h3 { margin: 0 0 7px; font-size: 1rem; color: #775222; }
+    .carbon-card p { margin: 0; font-size: .91rem; color: #655741; }
+    details { margin-top: 11px; }
+    summary { color: #75501c; cursor: pointer; font-weight: 750; font-size: .86rem; }
+    details p { margin: 8px 0 0; }
+    .result-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-top: 21px; }
+    .compare { margin: 20px 0 56px; padding: 25px; }
+    .compare-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 18px; }
+    .compare-card { border: 1px solid var(--line); border-radius: 15px; padding: 17px; background: white; }
+    .compare-card.fed-summary { border-top: 4px solid var(--amber); }
+    .compare-card.fast-summary { border-top: 4px solid var(--blue); }
+    .compare-card h3 { margin: 0 0 12px; }
+    .compare-card dl { display: grid; grid-template-columns: 92px 1fr; gap: 8px 11px; margin: 0; font-size: .86rem; }
+    .compare-card dt { color: var(--muted); font-weight: 750; }
+    .compare-card dd { margin: 0; }
+    .footnote { color: var(--muted); font-size: .82rem; margin: 15px 0 0; }
+    footer { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid rgba(23,42,54,.12); padding: 19px 0 28px; color: var(--muted); font-size: .8rem; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 760px) {
+      .hero { padding-top: 37px; }
+      .state-grid, .compare-grid { grid-template-columns: 1fr; }
+      .work-grid { grid-template-columns: 1fr; }
+      .step-nav { overflow-x: auto; display: flex; align-items: center; gap: 3px; padding: 8px; }
+      .step-nav-title { display: none; }
+      .step-button { width: auto; flex: 0 0 auto; padding: 7px; }
+      .step-label { display: none; }
+      .question-area { min-height: auto; }
+      .result-grid { grid-template-columns: repeat(2, 1fr); }
+      .chooser, .workspace, .compare { padding: 19px; }
+      footer { flex-direction: column; gap: 5px; }
+    }
+    @media (max-width: 430px) {
+      .shell { width: min(100% - 24px, 1120px); }
+      .topnote { display: none; }
+      .result-grid { grid-template-columns: 1fr; }
+      .compare-card dl { grid-template-columns: 78px 1fr; }
+      .action-row { align-items: flex-start; flex-direction: column; }
+      .primary-button { width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+  <link rel="stylesheet" href="./explorer.css">
+</head>
+<body>
+  <a class="skip-link" href="#explorer">Ir a la exploración</a>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">VT</div>
+        <span>Dra. Viviana Torres Águila</span>
+      </div>
+      <nav class="toplinks" aria-label="Secciones"><a href="#explorer">Explorar</a><a href="#chooser" id="nav-practice">Practicar</a><button class="plain-button" type="button" data-open-compare>Comparar</button></nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <span class="eyebrow">Carbohidratos y grasas</span>
+        <h1 id="page-title">Metabolismo en dos estados</h1>
+        <p class="lead">Explora cómo cambia la coordinación metabólica después de comer y durante el ayuno nocturno. En cada caso, conecta señales, tejidos, combustibles, rutas y objetivo fisiológico.</p>
+        <p class="byline">Enfoque didáctico y contenido: Dra. Viviana Torres Águila</p>
+        <p class="framework"><strong>El sello de esta propuesta:</strong> comenzar por qué necesita resolver el organismo y conectar esa necesidad con la señal hormonal, los tejidos, los combustibles, las rutas y el objetivo fisiológico.</p>
+      </section>
+
+      <section id="explorer" class="panel explorer" aria-labelledby="explore-title">
+        <div class="explorer-head">
+          <div><div class="section-kicker">Exploración libre</div><h2 id="explore-title">Una necesidad, cinco tejidos</h2></div>
+          <div class="state-switch" role="group" aria-label="Estado fisiológico de la exploración">
+            <button type="button" data-explore-state="fed" aria-pressed="true">☀ Estado alimentado</button>
+            <button type="button" data-explore-state="fast" aria-pressed="false">☾ Ayuno nocturno</button>
+          </div>
+        </div>
+        <p class="explore-guide">Alterna el estado, elige un tejido y pulsa una ruta para seguir el destino de los combustibles.</p>
+        <div class="overview">
+          <div><span>Señal hormonal</span><p id="explore-signal"></p></div>
+          <div><span>Combustibles en circulación</span><p id="explore-fuels"></p></div>
+          <div><span>Prioridad del organismo</span><p id="explore-goal"></p></div>
+        </div>
+        <div class="explore-grid">
+          <div class="organ-tabs" role="tablist" aria-label="Órganos y tejidos">
+            <button id="organ-tab-liver" type="button" role="tab" data-organ="liver" aria-selected="true" aria-controls="organ-panel"><span class="organ-index" aria-hidden="true">HÍ</span>Hígado</button>
+            <button id="organ-tab-muscle" type="button" role="tab" data-organ="muscle" aria-selected="false" aria-controls="organ-panel" tabindex="-1"><span class="organ-index" aria-hidden="true">MÚ</span>Músculo</button>
+            <button id="organ-tab-adipose" type="button" role="tab" data-organ="adipose" aria-selected="false" aria-controls="organ-panel" tabindex="-1"><span class="organ-index" aria-hidden="true">TA</span>Tejido adiposo</button>
+            <button id="organ-tab-brain" type="button" role="tab" data-organ="brain" aria-selected="false" aria-controls="organ-panel" tabindex="-1"><span class="organ-index" aria-hidden="true">CE</span>Cerebro</button>
+            <button id="organ-tab-rbc" type="button" role="tab" data-organ="rbc" aria-selected="false" aria-controls="organ-panel" tabindex="-1"><span class="organ-index" aria-hidden="true">ER</span>Eritrocitos</button>
+          </div>
+          <div id="organ-panel" class="organ-panel" role="tabpanel" aria-labelledby="organ-tab-liver" tabindex="0">
+            <h3 id="organ-name"></h3><p id="organ-role" class="organ-role"></p>
+            <div class="exchange"><div><small>Recibe o dispone de</small><p id="organ-input"></p></div><div><small>Destino o entrega</small><p id="organ-output"></p></div></div>
+            <span class="route-label">Explora una ruta o mecanismo</span>
+            <div id="route-buttons" class="route-buttons" role="group" aria-label="Rutas y mecanismos del tejido"></div>
+            <div id="route-detail" class="route-detail" aria-live="polite" aria-atomic="true"><strong id="route-flow"></strong><p id="route-copy"></p></div>
+            <p class="tissue-note"><strong>Conecta las ideas.</strong> <span id="organ-note"></span></p>
+          </div>
+        </div>
+        <p class="sr-only" id="explore-status" role="status"></p>
+        <div class="explorer-bottom"><p>Modelo cualitativo de una comida mixta y un ayuno nocturno habitual (aprox. 8–12 h). Los cambios son graduales y dependen de la comida, las reservas y la actividad. No se asignan porcentajes universales a las rutas. TAG: triacilglicéridos.</p><button class="plain-button" type="button" data-open-compare>Ver ambos estados juntos →</button></div>
+      </section>
+
+      <section id="chooser" class="panel chooser" aria-labelledby="choose-title">
+        <div class="section-kicker">Pon a prueba tu razonamiento</div>
+        <h2 id="choose-title">Elige el estado fisiológico</h2>
+        <p class="section-copy">Responde seis preguntas. Recibirás una explicación en cada paso y, al final, un resumen de la respuesta metabólica.</p>
+        <div class="state-grid">
+          <button class="state-card fed" data-start="fed" type="button">
+            <span class="state-top">
+              <span class="state-icon" aria-hidden="true">☀</span>
+              <span class="state-arrow" aria-hidden="true">↗</span>
+            </span>
+            <h3>Estado alimentado</h3>
+            <p>Hay nutrientes disponibles después de una comida. ¿Cómo se utilizan y almacenan?</p>
+            <span class="pill-row"><span class="pill">Insulina alta</span><span class="pill">Uso y almacenamiento</span></span>
+          </button>
+          <button class="state-card fast" data-start="fast" type="button">
+            <span class="state-top">
+              <span class="state-icon" aria-hidden="true">☾</span>
+              <span class="state-arrow" aria-hidden="true">↗</span>
+            </span>
+            <h3>Ayuno nocturno</h3>
+            <p>Han pasado varias horas desde la última comida. ¿Cómo se mantiene el suministro de energía?</p>
+            <span class="pill-row"><span class="pill">Insulina baja</span><span class="pill">Movilización de reservas</span></span>
+          </button>
+        </div>
+        <p class="scope-note">Este módulo se concentra en carbohidratos y grasas. Las respuestas no se guardan ni se envían a ningún sitio.</p>
+      </section>
+
+      <section id="workspace" class="panel workspace hidden" aria-labelledby="question-title">
+        <div class="work-head">
+          <button id="return-home" class="back-button" type="button">← Elegir otro estado</button>
+          <span id="state-label" class="state-label"><span class="dot" aria-hidden="true"></span><span id="state-label-text"></span></span>
+        </div>
+        <div class="work-grid">
+          <nav id="step-nav" class="step-nav" aria-label="Preguntas de razonamiento metabólico"></nav>
+          <div class="question-area">
+            <div class="progress-row"><span id="progress-text"></span><span id="score-text"></span></div>
+            <div class="progress-track" aria-hidden="true"><div id="progress-fill" class="progress-fill"></div></div>
+            <div id="question-content" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="result" class="panel workspace hidden" aria-labelledby="result-title"></section>
+
+      <section id="compare" class="panel compare hidden" aria-labelledby="compare-title">
+        <div class="section-kicker">Vista integrada</div>
+        <h2 id="compare-title" tabindex="-1">Dos estados, distintas prioridades</h2>
+        <p class="section-copy">Las rutas cambian con el contexto fisiológico; los tejidos coordinan su actividad para responder a necesidades diferentes.</p>
+        <div class="compare-grid">
+          <article class="compare-card fed-summary">
+            <h3>☀ Estado alimentado</h3>
+            <dl>
+              <dt>Prioridad</dt><dd>Utilizar los nutrientes disponibles y reponer reservas.</dd>
+              <dt>Señal</dt><dd>Insulina alta en relación con glucagón.</dd>
+              <dt>Combustibles</dt><dd>Glucosa absorbida y lípidos dietarios.</dd>
+              <dt>Tejidos</dt><dd>Hígado, músculo esquelético y tejido adiposo.</dd>
+              <dt>Rutas</dt><dd>Glucólisis y glucogénesis; almacenamiento de triacilglicéridos. La lipogénesis aumenta ante exceso de energía.</dd>
+              <dt>Resultado</dt><dd>Uso de nutrientes y almacenamiento de energía.</dd>
+            </dl>
+          </article>
+          <article class="compare-card fast-summary">
+            <h3>☾ Ayuno nocturno</h3>
+            <dl>
+              <dt>Prioridad</dt><dd>Mantener la glicemia y aportar ATP entre comidas.</dd>
+              <dt>Señal</dt><dd>Disminuye la insulina y aumenta la relación glucagón/insulina.</dd>
+              <dt>Combustibles</dt><dd>Glucosa de producción endógena y ácidos grasos movilizados desde el tejido adiposo.</dd>
+              <dt>Tejidos</dt><dd>Hígado, tejido adiposo y músculo esquelético.</dd>
+              <dt>Rutas</dt><dd>Glucogenólisis y gluconeogénesis hepáticas; lipólisis adiposa y β-oxidación.</dd>
+              <dt>Resultado</dt><dd>Movilización de reservas y uso de ácidos grasos en varios tejidos.</dd>
+            </dl>
+          </article>
+        </div>
+        <p class="footnote">Durante el ayuno nocturno, la glicemia recibe aportes de la glucogenólisis y la gluconeogénesis. El glicerol es uno de sus sustratos; no es el único.</p>
+        <p class="footnote">En ambos estados, el cerebro utiliza principalmente glucosa y los eritrocitos maduros dependen de ella para producir ATP mediante glucólisis.</p>
+        <div class="result-actions"><button id="compare-home" class="primary-button" type="button">Volver a elegir un estado</button></div>
+      </section>
+      <details class="sources"><summary>Alcance y lecturas de apoyo</summary>
+        <p>Recurso educativo de fisiología metabólica. La vista principal enfatiza cinco tejidos; no representa todos los flujos del organismo. El riñón también puede contribuir a la gluconeogénesis. Las proteínas aparecen como fuente de sustratos, aunque el foco del módulo está en carbohidratos y grasas.</p>
+        <ul>
+          <li><a href="https://www.jci.org/articles/view/119644" target="_blank" rel="noopener noreferrer">Hellerstein y cols. (1997). Gluconeogénesis y recambio del glucógeno durante el ayuno en humanos.</a></li>
+          <li><a href="https://pubmed.ncbi.nlm.nih.gov/1991802/" target="_blank" rel="noopener noreferrer">Jensen y cols. (1991). Glucagón y metabolismo de ácidos grasos en humanos.</a></li>
+          <li><a href="https://pubmed.ncbi.nlm.nih.gov/12453829/" target="_blank" rel="noopener noreferrer">Carey y cols. (2003). Almacenamiento de glucógeno muscular después de comidas mixtas.</a></li>
+          <li><a href="https://pubmed.ncbi.nlm.nih.gov/5024046/" target="_blank" rel="noopener noreferrer">Feig y cols. (1972). Metabolismo energético del eritrocito humano.</a></li>
+          <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2995543/" target="_blank" rel="noopener noreferrer">Pan y cols. (2002). Metabolismo de β-hidroxibutirato en el cerebro humano.</a></li>
+        </ul>
+      </details>
+    </main>
+
+    <footer>
+      <span>Proyecto educativo independiente · Dra. Viviana Torres Águila</span>
+      <span>Las respuestas se procesan solo en esta sesión.</span>
+    </footer>
+  </div>
+
+  <script>
+    const labels = [
+      "Problema energético",
+      "Señal hormonal",
+      "Tejidos",
+      "Combustibles",
+      "Rutas metabólicas",
+      "Objetivo fisiológico"
+    ];
+
+    const cases = {
+      fed: {
+        label: "Estado alimentado",
+        labelClass: "fed-label",
+        color: "fed",
+        steps: [
+          {
+            title: "¿Cuál es el problema energético?",
+            prompt: "Después de una comida, nutrientes provenientes de los carbohidratos y las grasas están disponibles. ¿Qué prioridad describe mejor este contexto?",
+            choices: [
+              "Movilizar las reservas para sostener la glicemia entre comidas.",
+              "Utilizar nutrientes disponibles y reponer reservas de energía.",
+              "Depender de la β-oxidación para mantener la energía inmediata."
+            ],
+            correct: 1,
+            explanation: "En el estado alimentado, el organismo utiliza los nutrientes absorbidos y repone reservas. La glucosa puede oxidarse o almacenarse como glucógeno; los lípidos dietarios contribuyen al almacenamiento de triacilglicéridos."
+          },
+          {
+            title: "¿Qué señal hormonal predomina?",
+            prompt: "Considera la respuesta hormonal a la llegada de nutrientes después de comer.",
+            choices: [
+              "Una relación insulina/glucagón elevada.",
+              "Una relación glucagón/insulina elevada.",
+              "Insulina y glucagón permanecen sin cambios."
+            ],
+            correct: 0,
+            explanation: "La secreción de insulina aumenta y la relación insulina/glucagón favorece el uso y almacenamiento de nutrientes. La respuesta depende del tejido: por ejemplo, la entrada de glucosa al hígado por GLUT2 no requiere insulina."
+          },
+          {
+            title: "¿Qué tejidos participan?",
+            prompt: "¿Qué conjunto de tejidos coordina el manejo de glucosa y lípidos en este estado?",
+            choices: [
+              "Principalmente el hígado.",
+              "Hígado, músculo esquelético y tejido adiposo.",
+              "Solo músculo esquelético y tejido adiposo."
+            ],
+            correct: 1,
+            explanation: "El hígado transforma y almacena nutrientes; el músculo capta glucosa y puede sintetizar glucógeno; el tejido adiposo capta y almacena lípidos. La insulina coordina parte de esta respuesta en los tejidos sensibles a su acción."
+          },
+          {
+            title: "¿Qué combustibles están disponibles?",
+            prompt: "Después de una comida mixta, ¿qué sustratos relevantes para este módulo llegan a los tejidos?",
+            choices: [
+              "Solo glucosa.",
+              "Glucosa y lípidos de la dieta, transportados en distintas formas.",
+              "Solo ácidos grasos liberados desde el tejido adiposo."
+            ],
+            correct: 1,
+            explanation: "La digestión aporta glucosa y lípidos. Los ácidos grasos dietarios se transportan principalmente como triacilglicéridos en lipoproteínas; su distribución depende del tejido y del estado nutricional."
+          },
+          {
+            title: "¿Qué rutas se activan o favorecen?",
+            prompt: "Selecciona el patrón que mejor resume el metabolismo de carbohidratos y grasas después de comer.",
+            choices: [
+              "Glucogenólisis y lipólisis como respuestas predominantes.",
+              "Glucólisis y glucogénesis; almacenamiento de triacilglicéridos en tejido adiposo.",
+              "Gluconeogénesis y β-oxidación como respuestas predominantes."
+            ],
+            correct: 1,
+            explanation: "La glucosa puede utilizarse en glucólisis o almacenarse como glucógeno. El tejido adiposo favorece el almacenamiento de triacilglicéridos. La lipogénesis hepática puede aumentar cuando existe exceso energético."
+          },
+          {
+            title: "¿Cuál es el objetivo fisiológico?",
+            prompt: "¿Qué resultado integra mejor estas respuestas metabólicas?",
+            choices: [
+              "Usar nutrientes, reponer reservas y almacenar energía sobrante.",
+              "Producir glucosa a partir de ácidos grasos de cadena par.",
+              "Movilizar triacilglicéridos para mantener el suministro de combustible."
+            ],
+            correct: 0,
+            explanation: "El estado alimentado combina utilización y almacenamiento. La proporción depende de los nutrientes disponibles y de las demandas del organismo; no toda la glucosa se convierte en grasa."
+          }
+        ],
+        summary: {
+          problem: "Utilizar nutrientes y reponer reservas.",
+          signal: "Insulina alta en relación con glucagón.",
+          tissues: "Hígado, músculo y tejido adiposo.",
+          fuels: "Glucosa y lípidos de la dieta.",
+          pathways: "Glucólisis, glucogénesis y almacenamiento de TAG.",
+          goal: "Uso de nutrientes y almacenamiento de energía.",
+          narrative: "La señal de insulina favorece la utilización de glucosa y la reposición de glucógeno. Los lípidos dietarios se distribuyen y almacenan; la lipogénesis hepática aumenta si hay exceso de energía."
+        }
+      },
+      fast: {
+        label: "Ayuno nocturno",
+        labelClass: "fast-label",
+        color: "fast",
+        steps: [
+          {
+            title: "¿Cuál es el problema energético?",
+            prompt: "Han pasado varias horas desde la última comida. ¿Qué necesidad debe resolver el organismo?",
+            choices: [
+              "Mantener la glicemia y aportar ATP entre comidas.",
+              "Almacenar la glucosa recién absorbida como triacilglicérido.",
+              "Detener la movilización de combustibles."
+            ],
+            correct: 0,
+            explanation: "Durante el ayuno nocturno no ingresan nutrientes desde el intestino. El hígado contribuye a mantener la glicemia y los tejidos movilizan o utilizan reservas para sostener sus necesidades energéticas."
+          },
+          {
+            title: "¿Qué señal hormonal predomina?",
+            prompt: "¿Qué cambio hormonal caracteriza la transición desde el estado alimentado al ayuno nocturno?",
+            choices: [
+              "Aumenta la relación insulina/glucagón.",
+              "Disminuye la insulina y aumenta la relación glucagón/insulina.",
+              "La insulina aumenta para activar la lipólisis."
+            ],
+            correct: 1,
+            explanation: "La insulina disminuye y la señal relativa de glucagón aumenta, especialmente relevante para el hígado. La disminución de insulina también reduce la inhibición de la lipólisis en el tejido adiposo."
+          },
+          {
+            title: "¿Qué tejidos participan?",
+            prompt: "¿Qué tejidos coordinan la producción de glucosa y el uso de reservas lipídicas?",
+            choices: [
+              "Hígado, tejido adiposo y músculo esquelético.",
+              "Solo tejido adiposo.",
+              "Hígado y músculo, sin participación del tejido adiposo."
+            ],
+            correct: 0,
+            explanation: "El hígado contribuye a mantener la glicemia; el tejido adiposo libera ácidos grasos y glicerol desde los triacilglicéridos; el músculo puede aumentar el uso de ácidos grasos como combustible."
+          },
+          {
+            title: "¿Qué combustibles se utilizan?",
+            prompt: "¿Qué combinación describe mejor el suministro de combustible durante un ayuno nocturno?",
+            choices: [
+              "Glucosa recién absorbida y ácidos grasos dietarios.",
+              "Glucosa liberada desde el hígado y ácidos grasos movilizados desde el tejido adiposo.",
+              "Glucosa formada directamente a partir de todos los ácidos grasos."
+            ],
+            correct: 1,
+            explanation: "La glucogenólisis hepática y la gluconeogénesis contribuyen a la glicemia. El tejido adiposo libera ácidos grasos y glicerol. El glicerol puede aportar carbono para gluconeogénesis; los ácidos grasos de cadena par aportan energía, pero no glucosa neta."
+          },
+          {
+            title: "¿Qué rutas se activan o favorecen?",
+            prompt: "Elige el patrón que integra mejor los tejidos y los combustibles.",
+            choices: [
+              "Glucogenólisis y gluconeogénesis hepáticas; lipólisis adiposa y β-oxidación.",
+              "Glucogénesis, glucólisis posprandial y almacenamiento de TAG.",
+              "Lipogénesis como principal fuente de glucosa."
+            ],
+            correct: 0,
+            explanation: "En el hígado, glucogenólisis y gluconeogénesis contribuyen a la producción de glucosa. En el tejido adiposo, la lipólisis libera glicerol y ácidos grasos; la β-oxidación permite oxidar ácidos grasos para obtener energía."
+          },
+          {
+            title: "¿Cuál es el objetivo fisiológico?",
+            prompt: "¿Qué resultado resume la respuesta metabólica al ayuno nocturno?",
+            choices: [
+              "Mantener el suministro de glucosa y usar reservas lipídicas para aportar energía.",
+              "Convertir todo el carbono de los ácidos grasos en glucosa.",
+              "Almacenar glucosa como glucógeno en todos los tejidos."
+            ],
+            correct: 0,
+            explanation: "La respuesta contribuye a mantener la glicemia y a cubrir necesidades energéticas mediante el uso de combustibles almacenados. La participación relativa de cada ruta depende del tiempo de ayuno y del tejido."
+          }
+        ],
+        summary: {
+          problem: "Mantener la glicemia y aportar ATP entre comidas.",
+          signal: "Insulina baja; relación glucagón/insulina mayor.",
+          tissues: "Hígado, tejido adiposo y músculo.",
+          fuels: "Glucosa hepática, glicerol y ácidos grasos movilizados.",
+          pathways: "Glucogenólisis, gluconeogénesis, lipólisis y β-oxidación.",
+          goal: "Mantener el suministro de glucosa y usar reservas lipídicas.",
+          narrative: "El hígado contribuye a la glicemia mediante glucogenólisis y gluconeogénesis. El tejido adiposo moviliza triacilglicéridos: el glicerol puede aportar carbono para formar glucosa y los ácidos grasos se oxidan para obtener energía."
+        }
+      }
+    };
+
+    let activeState = null;
+    let stepIndex = 0;
+    let score = 0;
+    let answered = false;
+
+    const chooser = document.getElementById("chooser");
+    const workspace = document.getElementById("workspace");
+    const result = document.getElementById("result");
+    const compare = document.getElementById("compare");
+    const label = document.getElementById("state-label");
+    const labelText = document.getElementById("state-label-text");
+    const nav = document.getElementById("step-nav");
+    const questionContent = document.getElementById("question-content");
+    const progressText = document.getElementById("progress-text");
+    const scoreText = document.getElementById("score-text");
+    const progressFill = document.getElementById("progress-fill");
+
+    function begin(state) {
+      activeState = state;
+      setExploreState(state);
+      stepIndex = 0;
+      score = 0;
+      chooser.classList.add("hidden");
+      result.classList.add("hidden");
+      compare.classList.add("hidden");
+      workspace.classList.remove("hidden");
+      label.className = "state-label " + cases[state].labelClass;
+      labelText.textContent = cases[state].label;
+      renderStep();
+      workspace.scrollIntoView({behavior: "smooth", block: "start"});
+    }
+
+    function renderNav() {
+      nav.innerHTML = '<div class="step-nav-title">Seis preguntas</div>';
+      labels.forEach(function(name, index) {
+        const item = document.createElement("div");
+        item.className = "step-button" + (index === stepIndex ? " current" : "") + (index < stepIndex ? " done" : "");
+        item.setAttribute("aria-current", index === stepIndex ? "step" : "false");
+        item.innerHTML = '<span class="step-number">' + (index < stepIndex ? "✓" : String(index + 1)) + '</span><span class="step-label">' + name + "</span>";
+        nav.appendChild(item);
+      });
+    }
+
+    function renderStep() {
+      const item = cases[activeState].steps[stepIndex];
+      answered = false;
+      renderNav();
+      progressText.textContent = "Pregunta " + (stepIndex + 1) + " de 6";
+      scoreText.textContent = "Respuestas correctas: " + score + "/6";
+      progressFill.style.width = (((stepIndex + 1) / 6) * 100) + "%";
+      questionContent.innerHTML =
+        '<div class="question-number">Pregunta ' + (stepIndex + 1) + '</div>' +
+        '<h2 id="question-title" class="question-title" tabindex="-1">' + item.title + '</h2>' +
+        '<p class="question-prompt">' + item.prompt + '</p>' +
+        '<div class="choices" role="group" aria-label="Alternativas de respuesta">' +
+          item.choices.map(function(choice, index) {
+            return '<button class="choice" type="button" data-choice="' + index + '">' +
+              '<span class="choice-mark" aria-hidden="true">' + String.fromCharCode(65 + index) + '</span>' +
+              '<span>' + choice + '</span>' +
+            '</button>';
+          }).join("") +
+        '</div>' +
+        '<div id="feedback" class="feedback hidden" role="status" aria-live="polite"></div>' +
+        '<div class="action-row"><span class="text-small">Elige una respuesta para ver la explicación.</span>' +
+        '<button id="next-step" class="primary-button" type="button" disabled>' + (stepIndex === 5 ? "Ver síntesis" : "Siguiente pregunta") + ' <span aria-hidden="true">→</span></button></div>';
+
+      questionContent.querySelectorAll("[data-choice]").forEach(function(button) {
+        button.addEventListener("click", function() {
+          selectChoice(Number(button.dataset.choice));
+        });
+      });
+      document.getElementById("next-step").addEventListener("click", function() {
+        if (!answered) return;
+        if (stepIndex < 5) {
+          stepIndex += 1;
+          renderStep();
+          document.getElementById("question-title").focus({preventScroll:true});
+        } else {
+          showResult();
+        }
+      });
+    }
+
+    function selectChoice(choiceIndex) {
+      if (answered) return;
+      answered = true;
+      const item = cases[activeState].steps[stepIndex];
+      const correct = choiceIndex === item.correct;
+      if (correct) score += 1;
+      questionContent.querySelectorAll("[data-choice]").forEach(function(button) {
+        const index = Number(button.dataset.choice);
+        button.disabled = true;
+        if (index === item.correct) {
+          button.classList.add("correct");
+          button.querySelector(".choice-mark").textContent = "✓";
+        } else if (index === choiceIndex) {
+          button.classList.add("incorrect");
+          button.querySelector(".choice-mark").textContent = "×";
+        }
+      });
+      const feedback = document.getElementById("feedback");
+      feedback.className = "feedback" + (correct ? "" : " wrong");
+      feedback.innerHTML = "<strong>" + (correct ? "Así es." : "Revisa la relación entre estado y ruta.") + "</strong><p>" + item.explanation + "</p>";
+      const next = document.getElementById("next-step");
+      next.disabled = false;
+      scoreText.textContent = "Respuestas correctas: " + score + "/6";
+      questionContent.querySelector(".text-small").textContent = correct ? "Buen razonamiento. Continúa con la siguiente pregunta." : "Lee la explicación y continúa.";
+      next.focus();
+    }
+
+    function showResult() {
+      workspace.classList.add("hidden");
+      result.classList.remove("hidden");
+      const data = cases[activeState].summary;
+      const icon = activeState === "fed" ? "☀" : "☾";
+      result.innerHTML =
+        '<div class="result-head"><div class="result-icon" aria-hidden="true">' + icon + '</div><div><div class="section-kicker">Síntesis del caso</div><h2 id="result-title">' + cases[activeState].label + '</h2><p>Respondiste correctamente ' + score + ' de 6 preguntas.</p></div></div>' +
+        '<div class="result-grid">' +
+          tile("Prioridad", data.problem) +
+          tile("Señal", data.signal) +
+          tile("Tejidos", data.tissues) +
+          tile("Combustibles", data.fuels) +
+          tile("Rutas", data.pathways) +
+          tile("Objetivo", data.goal) +
+        '</div>' +
+        '<div class="result-explanation"><h3>Lectura integrada</h3><p>' + data.narrative + '</p></div>' +
+        (activeState === "fast" ? '<div class="carbon-card"><h3>Seguir el carbono del triacilglicérido</h3><p>La lipólisis libera glicerol y ácidos grasos. En el hígado, el glicerol puede entrar a la gluconeogénesis. Los ácidos grasos de cadena par se oxidan y aportan energía, pero no forman glucosa neta.</p><details><summary>Nota de precisión</summary><p>Los ácidos grasos de cadena impar pueden aportar carbono glucogénico mediante propionil-CoA y succinil-CoA. Esta excepción no cambia la regla aplicada a los ácidos grasos de cadena par.</p></details></div>' : '') +
+        '<div class="result-actions"><button id="run-other" class="primary-button" type="button">' + (activeState === "fed" ? "Analizar el ayuno nocturno" : "Analizar el estado alimentado") + ' <span aria-hidden="true">→</span></button><button id="show-compare" class="plain-button" type="button">Comparar ambos estados</button><button id="restart" class="plain-button" type="button">Volver al inicio</button></div>';
+      result.scrollIntoView({behavior: "smooth", block: "start"});
+      document.getElementById("run-other").addEventListener("click", function() {
+        begin(activeState === "fed" ? "fast" : "fed");
+      });
+      document.getElementById("show-compare").addEventListener("click", function() {
+        result.classList.add("hidden");
+        compare.classList.remove("hidden");
+        compare.scrollIntoView({behavior: "smooth", block: "start"});
+      });
+      document.getElementById("restart").addEventListener("click", goHome);
+    }
+
+    function tile(title, value) {
+      return '<div class="result-tile"><span>' + title + '</span><strong>' + value + '</strong></div>';
+    }
+
+    function goHome() {
+      activeState = null;
+      workspace.classList.add("hidden");
+      result.classList.add("hidden");
+      compare.classList.add("hidden");
+      chooser.classList.remove("hidden");
+      chooser.scrollIntoView({behavior: "smooth", block: "start"});
+    }
+
+    document.querySelectorAll("[data-start]").forEach(function(button) {
+      button.addEventListener("click", function() { begin(button.dataset.start); });
+    });
+    document.getElementById("return-home").addEventListener("click", goHome);
+    document.getElementById("compare-home").addEventListener("click", goHome);
+    document.getElementById("nav-practice").addEventListener("click", goHome);
+  </script>
+  <script src="./explorer.js"></script>
+<footer style="margin:40px auto 20px; padding:20px; max-width:900px; text-align:center; border-top:1px solid #dce2df; font-family:Arial,sans-serif; font-size:12px; line-height:1.8; color:#61717a;">
+  <strong>Metabolismo en dos estados</strong><br>
+  Aplicación educativa interactiva<br>
+  © 2026 Dra. Viviana Torres Águila. Todos los derechos reservados.<br>
+  Prohibida la reproducción, modificación y redistribución no autorizada del código y contenidos originales.
+</footer>
+
+
+</body>
+</html>
